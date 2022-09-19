@@ -45,21 +45,21 @@ extern "C" {
  * 	o Other primitive: number, boolean (true/false) or null
  */
 typedef enum {
-	JSMN_UNDEFINED = 0,
-	JSMN_OBJECT = 1,
-	JSMN_ARRAY = 2,
-	JSMN_STRING = 3,
-	JSMN_PRIMITIVE = 4
+    JSMN_UNDEFINED = 0,
+    JSMN_OBJECT    = 1,
+    JSMN_ARRAY     = 2,
+    JSMN_STRING    = 3,
+    JSMN_PRIMITIVE = 4
 } jsmntype_t;
 
-enum jsmnerr {
-	/* Not enough tokens were provided */
-	JSMN_ERROR_NOMEM = -1,
-	/* Invalid character inside JSON string */
-	JSMN_ERROR_INVAL = -2,
-	/* The string is not a full JSON packet, more bytes expected */
-	JSMN_ERROR_PART = -3
-};
+typedef enum {
+    /* Not enough tokens were provided */
+    JSMN_ERROR_NOMEM = -1,
+    /* Invalid character inside JSON string */
+    JSMN_ERROR_INVAL = -2,
+    /* The string is not a full JSON packet, more bytes expected */
+    JSMN_ERROR_PART = -3
+} jsmnerr_t;
 
 /**
  * JSON token description.
@@ -68,12 +68,12 @@ enum jsmnerr {
  * @param		end		end position in JSON data string
  */
 typedef struct {
-	jsmntype_t type;
-	int start;
-	int end;
-	int size;
+    jsmntype_t type;
+    int        start;
+    int        end;
+    int        size;
 #ifdef JSMN_PARENT_LINKS
-	int parent;
+    int parent;
 #endif
 } jsmntok_t;
 
@@ -82,9 +82,9 @@ typedef struct {
  * the string being parsed now and current position in that string
  */
 typedef struct {
-	unsigned int pos; /* offset in the JSON string */
-	unsigned int toknext; /* next token to allocate */
-	int toksuper; /* superior token node, e.g parent object or array */
+    unsigned int pos;      /* offset in the JSON string */
+    unsigned int toknext;  /* next token to allocate */
+    int          toksuper; /* superior token node, e.g parent object or array */
 } jsmn_parser;
 
 /**
@@ -93,11 +93,22 @@ typedef struct {
 void jsmn_init(jsmn_parser *parser);
 
 /**
- * Run JSON parser. It parses a JSON data string into and array of tokens, each describing
+ * Run JSON parser. It parses a JSON data string into and array of tokens, each
+ * describing
  * a single JSON object.
  */
-int jsmn_parse(jsmn_parser *parser, const char *js, size_t len,
-		jsmntok_t *tokens, unsigned int num_tokens);
+jsmnerr_t jsmn_parse(jsmn_parser *parser, const char *js, const size_t len,
+                     jsmntok_t *tokens, const unsigned int num_tokens);
+
+/**
+ *  Find the first member with the given name
+ */
+jsmntok_t *object_get_member(const char *json, jsmntok_t *object, const char *name);
+
+/**
+ *  Return descriptive error
+ */
+const char *error_str(jsmnerr_t error);
 
 #ifdef __cplusplus
 }
