@@ -436,6 +436,10 @@ const char *jsmntype_str(jsmntype_t type) {
     }
 }
 
+char *jsmn_obj_dup(const char *js, jsmntok_t *object) {
+    return strndup(js + object->start, object->end - object->start);
+}
+
 const char *error_str(jsmnerr_t error) {
     switch (error) {
         case JSMN_ERROR_NOMEM:

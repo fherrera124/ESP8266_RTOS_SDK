@@ -103,12 +103,18 @@ jsmnerr_t jsmn_parse(jsmn_parser *parser, const char *js, const size_t len,
 /**
  *  Find the first member with the given name
  */
-jsmntok_t *object_get_member(const char *json, jsmntok_t *object, const char *name);
+jsmntok_t *object_get_member(const char *js, jsmntok_t *object, const char *name);
 
 /**
  * Find the element at the given position of an array (starting at 0).
  */
 jsmntok_t *array_get_at(jsmntok_t *object, int index);
+
+/**
+ * Create a string from a jsmntok_t object. Returns a pointer to it,
+ * or NULL if not created.
+ */
+char *jsmn_obj_dup(const char *js, jsmntok_t *object);
 
 /**
  *  Return descriptive error
